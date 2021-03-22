@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "nodemon -r esm ./server/app.js"
+    "start": "node -r esm ./server/app.js"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^1.2.0",

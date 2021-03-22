@@ -1,0 +1,33 @@
+{
+  "name": "devdeveloper_api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "server": "nodemon -r esm ./server/app.js"
+  },
+  "dependencies": {
+    "@auth0/nextjs-auth0": "^1.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
+    "express-jwt-authz": "^2.4.1",
+    "express-session": "^1.17.1",
+    "helmet": "^4.3.1",
+    "jwks-rsa": "^2.0.1",
+    "multer": "^1.4.2",
+    "sanitize-html": "^2.3.3",
+    "string-strip-html": "^8.2.0",
+    "ts-node": "^9.1.1",
+    "yup": "^0.32.8"
+  },
+  "devDependencies": {
+    "auth0-lock": "^11.27.2",
+    "brfs": "^2.0.2",
+    "ejsify": "^1.0.0",
+    "mongoose": "^5.11.10",
+    "packageify": "^1.0.0"
+  },
+  "proxy": "http://localhost:5000"
+}

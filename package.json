@@ -20,14 +20,12 @@
     "sanitize-html": "^2.3.3",
     "string-strip-html": "^8.2.0",
     "ts-node": "^9.1.1",
-    "yup": "^0.32.8"
-  },
-  "devDependencies": {
+    "yup": "^0.32.8",
     "auth0-lock": "^11.27.2",
     "brfs": "^2.0.2",
     "ejsify": "^1.0.0",
     "mongoose": "^5.11.10",
     "packageify": "^1.0.0"
   },
-  "proxy": "http://localhost:5000"
+  "devDependencies": {}
 }

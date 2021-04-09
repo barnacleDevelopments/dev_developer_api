@@ -22,6 +22,14 @@ CATEGORY ROUTES
 */
 
 const router = express.Router();
+
+
+// create validation schema 
+const categorySchema = yup.object().shape({
+    name: yup.string().required().min(4).max(20),
+    desc: yup.string().required().min(16).max(50)
+})
+
 // retrieve all categories
 router.get("/", (req, res) => {
 
@@ -72,11 +80,7 @@ router.get("/posts/:id", (req, res) => {
 // create one category
 router.post("/create", [jwtCheck, checkPermissions(["create:category"])], (req, res) => {
     const body = req.body; // request body
-    // create validation schema 
-    const categorySchema = yup.object().shape({
-        name: yup.string().required().min(4).max(20),
-        desc: yup.string().required().min(16).max(50)
-    })
+
     // validate incoming body against schema
     categorySchema.validate(body)
         .then(() => {
@@ -99,11 +103,7 @@ router.post("/create", [jwtCheck, checkPermissions(["create:category"])], (req, 
 router.put("/update/:id", [jwtCheck, checkPermissions(["update:category"])], (req, res) => {
     const body = req.body; // request body
     const id = req.params.id; // category id 
-    // create validation schema
-    const categorySchema = yup.object().shape({
-        name: yup.string().required().min(4).max(20),
-        desc: yup.string().required().min(16).max(40)
-    })
+
     // validate incoming body against schema
     categorySchema.validate(body)
         .then(() => {

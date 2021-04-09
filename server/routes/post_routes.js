@@ -16,6 +16,13 @@ import Category from "../models/category_model";
 import jwtCheck from "../middleware/jwt_token_check";
 import checkPermissions from "../middleware/jwt_permission_check";
 
+
+// VALIDATION SCHEMAS 
+let newPostSchema = yup.object().shape({
+    title: yup.string().required().min(5).max(15),
+    content: yup.string().required().min(50)
+});
+
 /*
 =================
 POST ROUTES
@@ -58,18 +65,14 @@ router.get("/:id", (req, res) => {
 router.post("/create/:catId", [jwtCheck, checkPermissions(["create:post"])], (req, res) => {
     let body = req.body; // request body
     const catId = req.params.catId; // category id
-    // create validation schema 
-    let newPostSchema = yup.object().shape({
-        title: yup.string().required().min(5).max(15),
-        content: yup.string().required().min(50)
-    });
-
 
     body.content = sanitizeHtml(body.content)
     // validate incoming body
     newPostSchema.validate(body)
         .then(() => {
             // create new post
+            body.catId = catId;
+
             Post.create(body, (err, post) => {
                 if (!err) {
                     // find category by id and update its post list

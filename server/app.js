@@ -24,7 +24,7 @@ const app = express();
 
 // CONNECT TO ATLAS CLUSTER
 mongoose.connect(
-  "mongodb+srv://test_user:JCylhXHFYC91J98P@devdeveloperblog.1t4lu.mongodb.net/blog?retryWrites=true&w=majority",
+  'mongodb://localhost:27017/blogs',
   { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false }
 );
 

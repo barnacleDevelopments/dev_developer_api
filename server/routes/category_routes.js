@@ -47,13 +47,15 @@ router.get("/", (req, res) => {
 
 // retrieve one category 
 router.get("/:id", (req, res) => {
+
     const catId = req.params.id; // category id
+    console.log(catId)
     // find one category by id
     Category.findOne({ _id: catId }, (err, cat) => {
         if (!err) {
-            res.status(200).json({ status: "error", message: err })
-        } else {
             res.status(500).json({ data: cat, status: "success" });
+        } else {
+            res.status(200).json({ status: "error", message: err })
         }
     });
 });

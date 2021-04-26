@@ -130,28 +130,28 @@ router.put("/update/:id", [jwtCheck, checkPermissions(["update:comment"])], (req
 router.delete("/delete/:commentId/:postId", [jwtCheck, checkPermissions(["delete:comment"])], (req, res) => {
     const commentId = req.params.commentId; // comment id
     const postId = req.params.postId; // post id 
+
     // find comment and delete from database
     Comment.findOneAndDelete({ _id: commentId }, (err, com) => {
         if (!err) {
             // find associated post
             Post.findById(postId, (err, data) => {
                 if (!err) {
+                    let updatedPost = data;
                     // filter out comment from post
-                    let newPostCommentList = data.comments.filter((id) => {
-                        id === commentId ? false : true;
-                    })
+                    updatedPost.comments = data.comments.filter((id) => id === commentId ? false : true)
+
                     // update post comment list 
-                    Post.findByIdAndUpdate(postId, { comments: newPostCommentList }, (err, data) => {
+                    Post.findByIdAndUpdate(postId, updatedPost, (err, data) => {
                         if (!err) {
                             console.log(`Comment with id: ${commentId} deleted!`)
-                            res.status(200).json({ status: "success" })
+                            res.status(200).json({ data: com })
                         } else {
                             res.status(500).json({ status: "error" });
                         }
                     })
                 }
             })
-
         } else {
             res.status(500).json({ status: "error" });
         }

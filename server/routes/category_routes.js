@@ -23,7 +23,6 @@ CATEGORY ROUTES
 
 const router = express.Router();
 
-
 // create validation schema 
 const categorySchema = yup.object().shape({
     name: yup.string().required().min(4).max(20),

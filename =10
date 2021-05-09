@@ -1,0 +1,8 @@
++ next@10.2.0
+added 238 packages from 165 contributors and audited 618 packages in 28.17s
+
+65 packages are looking for funding
+  run `npm fund` for details
+
+found 5 vulnerabilities (2 low, 3 moderate)
+  run `npm audit fix` to fix them, or `npm audit` for details

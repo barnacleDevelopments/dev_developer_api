@@ -71,7 +71,7 @@ app.use(helmet({
 app.use("/posts", postRoutes);
 app.use("/categories", categoryRoutes);
 app.use("/comments", commentRoutes);
-app.use("/projects", projectRoutes);
+// app.use("/projects", projectRoutes);
 
 app.get("*", ({ }, res) => {
   res.send("Welcome to the DevDeveloper API!");

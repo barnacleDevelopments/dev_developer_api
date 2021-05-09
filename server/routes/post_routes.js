@@ -136,6 +136,7 @@ router.put("/update/:id", [jwtCheck, checkPermissions(["update:post"])], (req, r
 router.delete("/delete/:postId/:catId", [jwtCheck, checkPermissions(["delete:post"])], (req, res) => {
     const postId = req.params.postId; // post id
     const catId = req.params.catId; // category id
+    console.log(postId)
     Post.findOneAndDelete({ _id: postId }, (err, post) => {
         if (!err) {
             console.log(`Post with id: ${post._id} deleted!`)
@@ -143,9 +144,8 @@ router.delete("/delete/:postId/:catId", [jwtCheck, checkPermissions(["delete:pos
             Category.findById(catId, (err, cat) => {
                 if (!err) {
                     // filter out deleted post
-                    let posts = cat.posts.filter((id) => {
-                        return id === postId ? false : true;
-                    })
+                    const posts = cat.posts.filter((id) => id != postId);
+
                     // update category's posts
                     Category.findByIdAndUpdate(catId, { posts: posts }, (err, cat) => {
                         if (!err) {

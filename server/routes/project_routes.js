@@ -5,38 +5,38 @@ FILE: projects_routes.js
 */
 
 // DEPENDENCIES
-import express from "express";
-import * as yup from "yup";
-import sanitizeHtml from "sanitize-html";
+// import express from "express";
+// import * as yup from "yup";
+// import sanitizeHtml from "sanitize-html";
 
-// MODELS
-import Project from "../models/project_model";
+// // MODELS
+// import Project from "../models/project_model";
 
-// MIDDLEWARE
-import jwtCheck from "../middleware/jwt_token_check";
-import checkPermissions from "../middleware/jwt_permission_check";
+// // MIDDLEWARE
+// import jwtCheck from "../middleware/jwt_token_check";
+// import checkPermissions from "../middleware/jwt_permission_check";
 
-// VALIDATION SCHEMAS 
-let newProjectSchema = yup.object().shape({
-    name: yup.string().required().min(5).max(15),
-    desc: yup.string().required().min(50)
-});
+// // VALIDATION SCHEMAS 
+// let newProjectSchema = yup.object().shape({
+//     name: yup.string().required().min(5).max(15),
+//     desc: yup.string().required().min(50)
+// });
 
-const router = express.Router();
-//retrieve all project
-router.get("/", (req, res) => {
-    // query all project
-    Project.find({}, (err, projects) => {
-        if (!err) {
-            res.status(200).json({ data: projects, status: "success" });
-            console.log("Retrieved projects from database.")
-        } else {
-            res.status(500).send({
-                status: "error",
-                message: "Failed to find projects in database."
-            })
-        }
-    })
-});
+// const router = express.Router();
+// //retrieve all project
+// router.get("/", (req, res) => {
+//     // query all project
+//     Project.find({}, (err, projects) => {
+//         if (!err) {
+//             res.status(200).json({ data: projects, status: "success" });
+//             console.log("Retrieved projects from database.")
+//         } else {
+//             res.status(500).send({
+//                 status: "error",
+//                 message: "Failed to find projects in database."
+//             })
+//         }
+//     })
+// });
 
-export default router;
+// export default router;

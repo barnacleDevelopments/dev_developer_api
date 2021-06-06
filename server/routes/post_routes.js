@@ -18,10 +18,6 @@ import checkPermissions from "../middleware/jwt_permission_check";
 
 
 // VALIDATION SCHEMAS 
-let newPostSchema = yup.object().shape({
-    title: yup.string().required().min(5).max(15),
-    content: yup.string().required().min(50)
-});
 
 /*
 =================
@@ -29,6 +25,7 @@ POST ROUTES
 =================
 */
 const router = express.Router();
+
 //retrieve all posts
 router.get("/", (req, res) => {
     // query all posts
@@ -67,55 +64,69 @@ router.post("/create/:catId", [jwtCheck, checkPermissions(["create:post"])], (re
     const catId = req.params.catId; // category id
 
     body.content = sanitizeHtml(body.content)
-    // validate incoming body
-    newPostSchema.validate(body)
-        .then(() => {
-            // create new post
-            body.catId = catId;
 
-            Post.create(body, (err, post) => {
+    // create new post
+    body.catId = catId;
+
+    Post.create(body, (err, post) => {
+        if (!err) {
+            // find category by id and update its post list
+            Category.findOne({ _id: catId }, (err, cat) => {
                 if (!err) {
-                    // find category by id and update its post list
-                    Category.findOne({ _id: catId }, (err, cat) => {
+                    let newPostArr = cat.posts // current category post array
+                    newPostArr.push(post._id) // push new post into categoires post array
+                    // replace old category list with new list
+                    Category.findByIdAndUpdate(catId, { posts: newPostArr }, (err, cat) => {
                         if (!err) {
-                            let newPostArr = cat.posts // current category post array
-                            newPostArr.push(post._id) // push new post into categoires post array
-                            // replace old category list with new list
-                            Category.findByIdAndUpdate(catId, { posts: newPostArr }, (err, cat) => {
-                                if (!err) {
-                                    res.status(201).json({ data: post, status: "success" })
-                                    console.log(`Category with id: ${cat._id} recieved a new post with id ${post._id}`)
-                                } else {
-                                    res.status(500).json({
-                                        status: "error",
-                                        message: "Failed to update item in database."
-                                    })
-                                }
-                            })
+                            res.status(201).json({ data: post, status: "success" })
+                            console.log(`Category with id: ${cat._id} recieved a new post with id ${post._id}`)
                         } else {
                             res.status(500).json({
                                 status: "error",
-                                message: "Failed to find item in database."
+                                message: "Failed to update item in database."
                             })
                         }
                     })
-                    console.log(`Post created! It's id is: ${post._id}`)
                 } else {
                     res.status(500).json({
                         status: "error",
-                        message: "Failed to add item to database."
+                        message: "Failed to find item in database."
                     })
                 }
             })
-        }).catch((err) => {
-            res.status(413).json({ status: "error", message: err.errors[0] })
-        })
+            console.log(`Post created! It's id is: ${post._id}`)
+        } else {
+            res.status(500).json({
+                status: "error",
+                message: "Failed to add item to database."
+            })
+        }
+    })
+
 });
+
+// create a draft post
+router.post("/create/draft", [jwtCheck, checkPermissions(["create:post"])], (req, res, next) => {
+    let body = req.body;
+    body.isDraft = true
+    body.content = sanitizeHtml(body.content)
+
+    Category.create(body, (err, post) => {
+        if (!err) {
+            res.status(201).json(post);
+        } else {
+            res.sendStatus(500)
+        }
+    });
+
+})
 
 // update one post
 router.put("/update/:id", [jwtCheck, checkPermissions(["update:post"])], (req, res) => {
     const body = req.body; // request body
     const postId = req.params.id; // post id
+
+    body.content = sanitizeHtml(body.content)
     // update post
     Post.findByIdAndUpdate(postId, body, {
         new: true
@@ -136,7 +147,7 @@ router.put("/update/:id", [jwtCheck, checkPermissions(["update:post"])], (req, r
 router.delete("/delete/:postId/:catId", [jwtCheck, checkPermissions(["delete:post"])], (req, res) => {
     const postId = req.params.postId; // post id
     const catId = req.params.catId; // category id
-    console.log(postId)
+
     Post.findOneAndDelete({ _id: postId }, (err, post) => {
         if (!err) {
             console.log(`Post with id: ${post._id} deleted!`)

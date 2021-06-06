@@ -1,8 +1,9 @@
 /*
 AUTHOR: Devin Davis
-DATE: January 2st, 2021
-FILE: blog_model.js
+DATE: May 23rd, 2021
+FILE: category_routes.js
 */
+
 
 import mongoose from "mongoose";
 
@@ -11,7 +12,6 @@ const postSchema = new mongoose.Schema({
     content: String,
     date: String,
     catId: String,
-    isDraft: Boolean,
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"

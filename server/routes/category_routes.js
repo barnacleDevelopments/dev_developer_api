@@ -35,12 +35,10 @@ router.get("/", (req, res) => {
     // retrieve all categories
     Category.find({}, (err, cats) => {
         if (!err) {
-            console.log("Sucessfuly retrieved all categories")
-            res.status(200).json({ data: cats, status: "success" })
+            res.status(200).json({ data: cats })
         } else {
-            res.status(500).json({ status: "error", message: err })
+            res.sendStatus(500)
         }
-
     })
 });
 
@@ -79,7 +77,7 @@ router.get("/posts/:id", (req, res) => {
 })
 
 // create one category
-router.post("/create", [jwtCheck, checkPermissions(["create:category"])], (req, res) => {
+router.post("/create", (req, res) => {
     const body = req.body; // request body
 
     // validate incoming body against schema
@@ -88,15 +86,13 @@ router.post("/create", [jwtCheck, checkPermissions(["create:category"])], (req, 
             // create category in database
             Category.create(body, (err, cat) => {
                 if (!err) {
-                    res.status(201).json({ data: cat, status: "success" });
-                    console.log(`Category with ${cat._id} created!`)
+                    res.status(201).json({ data: cat });
                 } else {
-                    console.log(err)
-                    res.status(500).send({ message: err })
+                    res.status(500).send("Failed to create category.")
                 }
             })
-        }).catch(err => {
-            res.status(413).send({ message: err.message })
+        }).catch(() => {
+            res.status(413).send("Failed to validate category.")
         })
 })
 

@@ -31,14 +31,12 @@ router.get("/", (req, res) => {
                     date: com.date,
                     content: com.content
                 }
-            })
-            res.status(200).send(newCommentList)
+            });
+            res.status(200).send(newCommentList);
         } else {
-            res.status(500).send({ status: "error" })
-            console.log(err)
+            res.status(500).send({ status: "error" });
         }
-
-    })
+    });
 });
 
 // retrieve one comment
@@ -52,18 +50,18 @@ router.get("/:id", (req, res) => {
 
 // retrieve post's comments
 router.get("/post/:id", (req, res) => {
-    let postId = req.params.id // post id
+    let postId = req.params.id; // post id
     // query all comments of post
     Post.findById(postId)
         .populate({ path: "comments" })
         .exec((err, post) => {
             if (!err) {
-                res.status(200).json(post.comments)
+                res.status(200).json(post.comments);
             } else {
                 res.status(500).json({ status: "error" });
             }
         });
-})
+});
 
 // create one comment
 router.post("/create/:postId", [jwtCheck, checkPermissions(["create:comment"])], (req, res) => {
@@ -86,28 +84,25 @@ router.post("/create/:postId", [jwtCheck, checkPermissions(["create:comment"])],
                                     .populate("comments")
                                     .exec((err, post) => {
                                         if (!err) {
-                                            console.log(`Comment with id: ${com._id} created!`)
                                             res.status(201).json({
                                                 _id: com._id,
                                                 date: com.date,
                                                 content: com.content,
                                                 username: com.username
-                                            })
+                                            });
                                         } else {
                                             res.status(500).json({ status: "error" });
                                         }
-                                    })
+                                    });
                             } else {
                                 res.status(500).json({ status: "error" });
                             }
-                        })
+                        });
                 } else {
                     res.status(500).json({ status: "error" });
                 }
             });
-
         } else {
-            console.log("Failed to create comment!")
             res.status(500).json({ status: "error" });
         }
     });
@@ -119,11 +114,11 @@ router.put("/update/:id", [jwtCheck, checkPermissions(["update:comment"])], (req
     const id = req.params.id;
     Comment.findOneAndUpdate({ _id: id }, body, (err, com) => {
         if (!err) {
-            console.log(`Comment with id: ${com._id} updated!`)
+            console.log(`Comment with id: ${com._id} updated!`);
         } else {
             res.status(500).json({ status: "error" });
         }
-    })
+    });
 });
 
 // delete one comment
@@ -139,23 +134,22 @@ router.delete("/delete/:commentId/:postId", [jwtCheck, checkPermissions(["delete
                 if (!err) {
                     let updatedPost = data;
                     // filter out comment from post
-                    updatedPost.comments = data.comments.filter((id) => id === commentId ? false : true)
+                    updatedPost.comments = data.comments.filter((id) => id === commentId ? false : true);
 
                     // update post comment list 
                     Post.findByIdAndUpdate(postId, updatedPost, (err, data) => {
                         if (!err) {
-                            console.log(`Comment with id: ${commentId} deleted!`)
-                            res.status(200).json({ data: com })
+                            res.status(200).json({ data: com });
                         } else {
                             res.status(500).json({ status: "error" });
                         }
-                    })
+                    });
                 }
-            })
+            });
         } else {
             res.status(500).json({ status: "error" });
         }
-    })
-})
+    });
+});
 
 export default router;

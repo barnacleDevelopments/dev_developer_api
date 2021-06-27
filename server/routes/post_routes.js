@@ -37,14 +37,14 @@ router.get("/", (req, res) => {
             res.status(500).send({
                 status: "error",
                 message: "Failed to find items in database."
-            })
+            });
         }
-    })
+    });
 });
 
 // retrieve one post
 router.get("/:id", (req, res) => {
-    const blogId = req.params.id  // get blog id
+    const blogId = req.params.id;  // get blog id
     // query single blog by id
     Post.findOne({ _id: blogId }, (err, blog) => {
         if (!err) {
@@ -53,9 +53,9 @@ router.get("/:id", (req, res) => {
             res.status(500).send({
                 status: "error",
                 message: "Failed to find item in database."
-            })
+            });
         }
-    })
+    });
 });
 
 // create one post 
@@ -63,7 +63,7 @@ router.post("/create/:catId", [jwtCheck, checkPermissions(["create:post"])], (re
     let body = req.body; // request body
     const catId = req.params.catId; // category id
 
-    body.content = sanitizeHtml(body.content)
+    body.content = sanitizeHtml(body.content);
 
     // create new post
     body.catId = catId;
@@ -78,31 +78,28 @@ router.post("/create/:catId", [jwtCheck, checkPermissions(["create:post"])], (re
                     // replace old category list with new list
                     Category.findByIdAndUpdate(catId, { posts: newPostArr }, (err, cat) => {
                         if (!err) {
-                            res.status(201).json({ data: post, status: "success" })
-                            console.log(`Category with id: ${cat._id} recieved a new post with id ${post._id}`)
+                            res.status(201).json({ data: post, status: "success" });
                         } else {
                             res.status(500).json({
                                 status: "error",
                                 message: "Failed to update item in database."
-                            })
+                            });
                         }
-                    })
+                    });
                 } else {
                     res.status(500).json({
                         status: "error",
                         message: "Failed to find item in database."
-                    })
+                    });
                 }
-            })
-            console.log(`Post created! It's id is: ${post._id}`)
+            });
         } else {
             res.status(500).json({
                 status: "error",
                 message: "Failed to add item to database."
-            })
+            });
         }
-    })
-
+    });
 });
 
 // create a draft post
@@ -115,11 +112,10 @@ router.post("/create/draft", [jwtCheck, checkPermissions(["create:post"])], (req
         if (!err) {
             res.status(201).json(post);
         } else {
-            res.sendStatus(500)
+            res.sendStatus(500);
         }
     });
-
-})
+});
 
 // update one post
 router.put("/update/:id", [jwtCheck, checkPermissions(["update:post"])], (req, res) => {
@@ -133,14 +129,13 @@ router.put("/update/:id", [jwtCheck, checkPermissions(["update:post"])], (req, r
     }, (err, post) => {
         if (!err) {
             res.status(201).json({ data: post, status: "success" })
-            console.log(`Post updated! It's id is: ${post._id}`)
         } else {
             res.status(500).send({
                 status: "failure",
                 message: "Failed to update item in database."
-            })
+            });
         }
-    })
+    });
 });
 
 // delete one post
@@ -150,7 +145,6 @@ router.delete("/delete/:postId/:catId", [jwtCheck, checkPermissions(["delete:pos
 
     Post.findOneAndDelete({ _id: postId }, (err, post) => {
         if (!err) {
-            console.log(`Post with id: ${post._id} deleted!`)
             // retrieve posts of post's category
             Category.findById(catId, (err, cat) => {
                 if (!err) {
@@ -163,29 +157,28 @@ router.delete("/delete/:postId/:catId", [jwtCheck, checkPermissions(["delete:pos
                             res.status(200).json({
                                 status: "success",
                                 message: "Removed item from database."
-                            })
-                            console.log(`Category with id: ${cat._id} posts updated!`)
+                            });
                         } else {
                             res.status(500).json({
                                 status: "failure",
                                 message: "Failed to update item in database."
-                            })
+                            });
                         }
-                    })
+                    });
                 } else {
                     res.status(500).json({
                         status: "failure",
                         message: "Failed to find item in database."
-                    })
+                    });
                 }
-            })
+            });
         } else {
             res.status(500).json({
                 status: "failure",
                 message: "Failed to delete item in database."
-            })
+            });
         }
-    })
-})
+    });
+});
 
 export default router;

@@ -3,6 +3,7 @@ AUTHOR: Devin Davis
 DATE: January 3st, 2021
 FILE: category_routes.js
 */
+
 // DEPENDENCIES
 import express from "express";
 import * as yup from "yup"
@@ -31,35 +32,32 @@ const categorySchema = yup.object().shape({
 
 // retrieve all categories
 router.get("/", (req, res) => {
-
     // retrieve all categories
     Category.find({}, (err, cats) => {
         if (!err) {
-            res.status(200).json({ data: cats })
+            res.status(200).json({ data: cats });
         } else {
-            res.sendStatus(500)
+            res.sendStatus(500);
         }
-    })
+    });
 });
 
 // retrieve one category 
 router.get("/:id", (req, res) => {
-
-    const catId = req.params.id; // category id
-    console.log(catId)
+    const catId = req.params.id;
     // find one category by id
     Category.findOne({ _id: catId }, (err, cat) => {
         if (!err) {
             res.status(500).json({ data: cat, status: "success" });
         } else {
-            res.status(200).json({ status: "error", message: err })
+            res.status(200).json({ status: "error", message: err });
         }
     });
 });
 
 // retrieve posts of category
 router.get("/posts/:id", (req, res) => {
-    const catId = req.params.id; // category id
+    const catId = req.params.id;
     // find all posts associated with category
     Category.findById(catId)
         .populate("posts")
@@ -71,15 +69,14 @@ router.get("/posts/:id", (req, res) => {
                 res.status(500).json({
                     status: "error",
                     message: err
-                })
+                });
             }
         });
-})
+});
 
 // create one category
 router.post("/create", (req, res) => {
-    const body = req.body; // request body
-
+    const body = req.body;
     // validate incoming body against schema
     categorySchema.validate(body)
         .then(() => {
@@ -88,18 +85,18 @@ router.post("/create", (req, res) => {
                 if (!err) {
                     res.status(201).json({ data: cat });
                 } else {
-                    res.status(500).send("Failed to create category.")
+                    res.status(500).send("Failed to create category.");
                 }
             })
         }).catch(() => {
-            res.status(413).send("Failed to validate category.")
-        })
-})
+            res.status(413).send("Failed to validate category.");
+        });
+});
 
 // update one category
 router.put("/update/:id", [jwtCheck, checkPermissions(["update:category"])], (req, res) => {
-    const body = req.body; // request body
-    const id = req.params.id; // category id 
+    const body = req.body;
+    const id = req.params.id;
 
     // validate incoming body against schema
     categorySchema.validate(body)
@@ -109,34 +106,32 @@ router.put("/update/:id", [jwtCheck, checkPermissions(["update:category"])], (re
                 new: true
             }, (err, cat) => {
                 if (!err) {
-                    res.status(201).json({ data: cat, status: "success" })
-                    console.log(`Category with id: ${cat._id} updated!`)
+                    res.status(201).json({ data: cat, status: "success" });
                 } else {
-                    res.status(500).send({ message: "Failed to update category." })
+                    res.status(500).send({ message: "Failed to update category." });
                 }
             })
-        }).catch(err => res.status(413).send({ message: err.message }))
+        }).catch(err => res.status(413).send({ message: err.message }));
 });
 
 // delete one category
 router.delete("/delete/:id", [jwtCheck, checkPermissions(["delete:category"])], (req, res) => {
-    const catId = req.params.id; // category id
+    const catId = req.params.id;
     // find category and delete it
     Category.findOneAndDelete({ _id: catId }, (err, cat) => {
         if (!err) {
             // delete all post of delete category
             Post.deleteMany({ catId: catId }, (err) => {
                 if (!err) {
-                    res.status(200).send({ message: "success" })
-                    console.log(`Category with id: ${cat._id} deleted!`)
+                    res.status(200).send({ message: "success" });
                 } else {
-                    res.status(500).send({ message: "Failed to delete posts of category." })
+                    res.status(500).send({ message: "Failed to delete posts of category." });
                 }
             })
         } else {
-            res.status(500).send({ message: "Failed to query category in database." })
+            res.status(500).send({ message: "Failed to query category in database." });
         }
-    })
-})
+    });
+});
 
 export default router;

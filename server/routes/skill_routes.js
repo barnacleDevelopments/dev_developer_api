@@ -1,6 +1,6 @@
 /*
 AUTHOR: Devin Davis
-DATE: April 18th, 2021
+DATE: July 25th, 2021
 FILE: projects_routes.js
 */
 
@@ -10,11 +10,7 @@ import * as yup from "yup";
 import sanitizeHtml from "sanitize-html";
 
 // MODELS
-import Project from "../models/project_model";
-
-// MIDDLEWARE
-import jwtCheck from "../middleware/jwt_token_check";
-import checkPermissions from "../middleware/jwt_permission_check";
+import Skill from "../models/skill_model";
 
 // VALIDATION SCHEMAS 
 let newProjectSchema = yup.object().shape({
@@ -23,17 +19,18 @@ let newProjectSchema = yup.object().shape({
 });
 
 const router = express.Router();
-//retrieve all project
+//retrieve all skill
 router.get("/", (req, res) => {
-    // query all project
-    Project.find({}, (err, projects) => {
+    // query all skill
+    Skill.find({}, (err, skills) => {
         if (!err) {
-            console.log(projects)
-            res.status(200).json({ data: projects, status: "success" });
+            console.log(skills)
+            res.status(200).json({ data: skills, status: "success" });
+            console.log("Retrieved skills from database.")
         } else {
             res.status(500).send({
                 status: "error",
-                message: "Failed to find projects in database."
+                message: "Failed to find skills in database."
             })
         }
     })

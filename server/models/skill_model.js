@@ -11,6 +11,7 @@ const skillSchema = new mongoose.Schema({
     desc: String,
     skillLevel: Number,
     link: String,
+    image: String
 });
 
 const Skill = mongoose.model("skill", skillSchema);

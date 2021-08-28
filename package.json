@@ -21,6 +21,7 @@
     "jwks-rsa": "^2.0.1",
     "mongoose": "^5.11.10",
     "multer": "^1.4.2",
+    "nodemailer": "^6.6.3",
     "packageify": "^1.0.0",
     "sanitize-html": "^2.3.3",
     "string-strip-html": "^8.2.0",

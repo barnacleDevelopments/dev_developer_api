@@ -17,6 +17,8 @@ import postRoutes from "./routes/post_routes";
 import categoryRoutes from "./routes/category_routes";
 import commentRoutes from "./routes/comment_routes";
 import projectRoutes from "./routes/project_routes";
+import mailRoutes from "./routes/mail_routes";
+import skillRoutes from "./routes/skill_routes";
 
 // ENV VARIABLES
 const PORT = process.env.PORT;
@@ -71,7 +73,9 @@ app.use(helmet({
 app.use("/posts", postRoutes);
 app.use("/categories", categoryRoutes);
 app.use("/comments", commentRoutes);
-// app.use("/projects", projectRoutes);
+app.use("/projects", projectRoutes);
+app.use("/mail", mailRoutes);
+app.use("/skills", skillRoutes)
 
 app.get("*", ({ }, res) => {
   res.send("Welcome to the DevDeveloper API!");

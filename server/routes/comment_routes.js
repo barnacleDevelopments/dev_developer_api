@@ -114,7 +114,7 @@ router.put("/update/:id", [jwtCheck, checkPermissions(["update:comment"])], (req
     const id = req.params.id;
     Comment.findOneAndUpdate({ _id: id }, body, (err, com) => {
         if (!err) {
-            console.log(`Comment with id: ${com._id} updated!`);
+            res.status(200);
         } else {
             res.status(500).json({ status: "error" });
         }

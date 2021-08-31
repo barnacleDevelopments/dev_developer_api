@@ -64,7 +64,6 @@ router.get("/posts/:id", (req, res) => {
         .exec((err, cat) => {
             if (!err) {
                 res.status(200).json({ data: cat.posts, status: "success" });
-                console.log(`Posts retrieved from category with id: ${cat._id}`)
             } else {
                 res.status(500).json({
                     status: "error",

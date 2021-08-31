@@ -24,9 +24,7 @@ router.get("/", (req, res) => {
     // query all skill
     Skill.find({}, (err, skills) => {
         if (!err) {
-            console.log(skills)
             res.status(200).json({ data: skills, status: "success" });
-            console.log("Retrieved skills from database.")
         } else {
             res.status(500).send({
                 status: "error",

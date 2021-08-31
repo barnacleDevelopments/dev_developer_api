@@ -32,7 +32,6 @@ router.get("/", (req, res) => {
     Post.find({}, (err, blogs) => {
         if (!err) {
             res.status(200).json({ data: blogs, status: "success" });
-            console.log("Retrieved posts from database.")
         } else {
             res.status(500).send({
                 status: "error",

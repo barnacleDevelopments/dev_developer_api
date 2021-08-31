@@ -28,7 +28,6 @@ router.get("/", (req, res) => {
     // query all project
     Project.find({}, (err, projects) => {
         if (!err) {
-            console.log(projects)
             res.status(200).json({ data: projects, status: "success" });
         } else {
             res.status(500).send({

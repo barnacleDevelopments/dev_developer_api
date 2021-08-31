@@ -2,9 +2,10 @@
   "name": "devdeveloper_api",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "start": "node -r esm ./server/app.js",
-    "dev": "nodemon -r esm ./server/app.js"
+    "start": "node ./server/app.js",
+    "dev": "nodemon ./server/app.js"
   },
   "dependencies": {
     "auth0-lock": "^11.27.2",

@@ -10,7 +10,7 @@ import * as yup from "yup";
 import sanitizeHtml from "sanitize-html";
 
 // MODELS
-import Skill from "../models/skill_model";
+import Skill from "../models/skill_model.js";
 
 // VALIDATION SCHEMAS 
 let newProjectSchema = yup.object().shape({

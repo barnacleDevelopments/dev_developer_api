@@ -1,4 +1,4 @@
-const jwtAuthz = require("express-jwt-authz");
+import jwtAuthz from "express-jwt-authz";
 
 export const checkPermissions = (permissions) => {
     return jwtAuthz([...permissions], {

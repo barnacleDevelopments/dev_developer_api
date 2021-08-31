@@ -10,11 +10,11 @@ import * as yup from "yup";
 import sanitizeHtml from "sanitize-html";
 
 // MODELS
-import Project from "../models/project_model";
+import Project from "../models/project_model.js";
 
 // MIDDLEWARE
-import jwtCheck from "../middleware/jwt_token_check";
-import checkPermissions from "../middleware/jwt_permission_check";
+import jwtCheck from "../middleware/jwt_token_check.js";
+import checkPermissions from "../middleware/jwt_permission_check.js";
 
 // VALIDATION SCHEMAS 
 let newProjectSchema = yup.object().shape({

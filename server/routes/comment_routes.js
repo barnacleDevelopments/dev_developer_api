@@ -8,12 +8,12 @@ FILE: comment_routes.js
 import express from "express";
 
 // MODELS
-import Comment from "../models/comment_model";
-import Post from "../models/post_model";
+import Comment from "../models/comment_model.js";
+import Post from "../models/post_model.js";
 
 // JWT MIDDLEWARE
-import jwtCheck from "../middleware/jwt_token_check";
-import checkPermissions from "../middleware/jwt_permission_check";
+import jwtCheck from "../middleware/jwt_token_check.js";
+import checkPermissions from "../middleware/jwt_permission_check.js";
 
 // CATEGORY ROUTES
 const router = express.Router();

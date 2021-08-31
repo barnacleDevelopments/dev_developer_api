@@ -13,12 +13,12 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // ROUTES
-import postRoutes from "./routes/post_routes";
-import categoryRoutes from "./routes/category_routes";
-import commentRoutes from "./routes/comment_routes";
-import projectRoutes from "./routes/project_routes";
-import mailRoutes from "./routes/mail_routes";
-import skillRoutes from "./routes/skill_routes";
+import postRoutes from "./routes/post_routes.js";
+import categoryRoutes from "./routes/category_routes.js";
+import commentRoutes from "./routes/comment_routes.js";
+import projectRoutes from "./routes/project_routes.js";
+import mailRoutes from "./routes/mail_routes.js";
+import skillRoutes from "./routes/skill_routes.js";
 
 // ENV VARIABLES
 const PORT = process.env.PORT;
@@ -43,18 +43,18 @@ db.once('open', function () {
 // +++++++++++++++
 
 // CROSS ORGIN REQUEST SETTINGS
-var whitelist = ['https://blog.devdeveloper.ca', 'https://devdeveloper.ca']
-var corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
+var whitelist = ['https://blog.devdeveloper.ca', 'https://devdeveloper.ca', 'http://localhost:5000', 'http://localhost:8080']
+var corsOptionsDelegate = function (req, callback) {
+  var corsOptions;
+  if (whitelist.indexOf(req.header('Origin')) !== -1) {
+    corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+  } else {
+    corsOptions = { origin: false } // disable CORS for this request
   }
+  callback(null, corsOptions) // callback expects two parameters: error and options
 }
 
-app.use(cors(corsOptions));
+app.use("*", cors(corsOptionsDelegate));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
